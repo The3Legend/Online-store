@@ -9,12 +9,12 @@
 
 <script>
 import CheckboxFilter from "./ChekboxFilter";
-import CardGrop from './Card'
+import CardGrop from "./Card";
 export default {
   name: "Frame",
   components: {
     CheckboxFilter,
-    CardGrop
+    CardGrop,
   },
 };
 </script>

@@ -15,11 +15,7 @@ export default {
     Frame,
   },
   data() {
-    return {
-      listItem:[
-        
-      ]
-    };
+    return {};
   },
 };
 </script>
