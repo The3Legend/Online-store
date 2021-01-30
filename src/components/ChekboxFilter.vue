@@ -20,28 +20,21 @@
           </svg>
         </div>
       </div>
-      <div class="range-slider">
-        <input
-          type="range"
-          name=""
-          id="minPrice"
-          min="0"
-          max="999999"
-          step="10"
-          v-model.number="minPrice"
-        />
-      </div>
+      <div class="range-slider"></div>
     </div>
-    <div class="materials">
+    <div class="materials" ref="materialControl">
       <div class="material">
         <div class="text-material">Материал</div>
         <div class="material-vector">
           <svg
+            v-b-toggle.collapse-3
+            class="m-1"
             width="14"
             height="9"
             viewBox="0 0 14 9"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            @click="chang"
           >
             <path
               d="M13.8897 8.15024L13.6678 8.38388C13.5207 8.53871 13.2823 8.53871 13.1352 8.38388L6.99999 1.92453L0.864777 8.38388C0.717716 8.53871 0.479267 8.53871 0.332175 8.38388L0.110296 8.15024C-0.0367652 7.99541 -0.0367652 7.74436 0.110296 7.58953L6.7337 0.616124C6.88076 0.461292 7.11921 0.461292 7.2663 0.616124L13.8897 7.58953C14.0368 7.74436 14.0368 7.99541 13.8897 8.15024Z"
@@ -50,20 +43,24 @@
           </svg>
         </div>
       </div>
-      <div class="checkbox-filt">
+      <b-collapse class="checkbox-filt" visible id="collapse-3">
         <b-form-checkbox
           class="check-style"
           v-for="material in materials"
           :key="material.id"
-          >{{ material.title }}</b-form-checkbox
+          v-model="checkboxArray"
+          :value="material.title"
         >
-      </div>
+          {{ material.title }}
+        </b-form-checkbox>
+      </b-collapse>
     </div>
     <div class="country">
       <div class="country-selection">
         <div class="country-text">Страна производитель</div>
         <div>
           <svg
+            v-b-toggle.collapse-4
             width="14"
             height="8"
             viewBox="0 0 14 8"
@@ -77,25 +74,85 @@
           </svg>
         </div>
       </div>
+      <b-collapse class="checkbox-filt" visible id="collapse-4">
+        <input
+          type="checkbox"
+          @click="checkAll()"
+          v-model="isCheckAll"
+        />
+        <b-form-checkbox
+          class="check-style"
+          v-for="country in countries"
+          :key="country.id"
+          v-model="checkboxCountry"
+          :value="country.title"
+          @change="updateCheckall()"
+        >
+          {{ country.title }}
+        </b-form-checkbox>
+      </b-collapse>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import { HTTP } from "../axios/plagins";
 export default {
   name: "CheckboxFilter",
   data() {
     return {
       materials: [],
-      minPrice: 0,
-      maxPrice: 999999,
+      countries: [],
+      checkboxArray: [],
+      checkboxCountry: [],
+      isCheckAll: false,
+      lol: false,
     };
   },
   created() {
-    axios
-      .get("http://95.217.16.207:1337/materials")
-      .then((response) => (this.materials = response.data));
+    HTTP.get("http://95.217.16.207:1337/materials")
+      .then((respons) => {
+        this.materials = respons.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    HTTP.get("http://95.217.16.207:1337/manufacturers")
+      .then((respons) => {
+        console.log((this.countries = respons.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  methods: {
+    chang: function() {
+      this.lol = !this.lol;
+      if (this.lol) {
+        setTimeout(() => {
+          this.$refs.materialControl.style.height = "100px";
+        }, 100);
+      } else
+        setTimeout(() => {
+          this.$refs.materialControl.style.height = "322px";
+        }, 100);
+    },
+    checkAll: function() {
+      this.isCheckAll = !this.isCheckAll;
+      this.checkboxCountry = [];
+      if (this.isCheckAll) {
+        for (var key in this.countries) {
+          this.checkboxCountry.push(this.countries[key].title);
+        }
+      }
+    },
+    updateCheckall: function() {
+      if (this.checkboxCountry.length == this.countries.length) {
+        this.isCheckAll = true;
+      } else {
+        this.isCheckAll = false;
+      }
+    },
   },
 };
 </script>
@@ -160,8 +217,6 @@ export default {
   order: 0;
   align-self: stretch;
   flex-grow: 0;
-}
-.text-price {
 }
 
 .materials {
@@ -278,7 +333,7 @@ export default {
 
   position: static;
   width: 299px;
-  height: 47px;
+  height: 129px;
   left: 0px;
   top: 505.5px;
 

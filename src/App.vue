@@ -23,8 +23,8 @@ export default {
 <style>
 #app {
   position: relative;
-  width: 1920px;
-  height: 2797px;
+  width: 100%;
+
   background: #ffffff;
 }
 </style>

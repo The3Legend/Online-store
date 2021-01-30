@@ -57,7 +57,7 @@
         v-for="page in pages"
         :key="page"
         @click="pageClick(page)"
-        :class="{'page-selected': page === pageNumber}"
+        :class="{ 'page-selected': page === pageNumber }"
       >
         {{ page }}
       </div>
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { HTTP } from "../axios/plagins";
 export default {
   name: "CardGrop",
 
@@ -91,9 +91,11 @@ export default {
     };
   },
   created() {
-    axios
-      .get("http://95.217.16.207:1337/products")
-      .then((response) => (this.products = response.data));
+    HTTP.get()
+      .then((response) => (this.products = response.data))
+      .catch((error) => {
+        console.log(error);
+      });
   },
   computed: {
     pages() {

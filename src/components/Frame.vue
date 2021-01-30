@@ -4,17 +4,23 @@
       <CheckboxFilter />
       <CardGrop />
     </div>
+    <InputCall />
+    <Footer/>
   </div>
 </template>
 
 <script>
 import CheckboxFilter from "./ChekboxFilter";
 import CardGrop from "./Card";
+import InputCall from "./InputCall";
+import Footer from './Footer'
 export default {
   name: "Frame",
   components: {
     CheckboxFilter,
     CardGrop,
+    InputCall,
+    Footer
   },
 };
 </script>
@@ -25,10 +31,8 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 0px;
-
   position: absolute;
-  width: 1920px;
-  height: 2632px;
+  width: 100%;
   left: 0px;
   top: 166px;
 }
@@ -40,7 +44,7 @@ export default {
 
   position: static;
   width: 1264px;
-  height: 2086px;
+  height: 1200px;
   left: 328px;
   top: 0px;
 
