@@ -82,12 +82,22 @@
 import { HTTP } from "../axios/plagins";
 export default {
   name: "CardGrop",
-
+   props: {
+    filterCountrys: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
   data() {
     return {
       products: [],
       usersPerPage: 6,
       pageNumber: 1,
+      something: "",
+      massage: "",
+      newArrayProducts: [],
     };
   },
   created() {
@@ -104,7 +114,7 @@ export default {
     paginatedUsers() {
       let from = (this.pageNumber - 1) * this.usersPerPage;
       let to = from + this.usersPerPage;
-      return this.products.slice(from, to);
+      return this.filterCountrys.slice(from, to);
     },
   },
   methods: {

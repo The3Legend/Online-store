@@ -10,8 +10,8 @@
 export default {
   name: "Pagination",
   props: {
-    products: {
-      type: Array,
+    filterCountry: {
+      type: () => {},
       default: () => {
         return [];
       },
@@ -30,10 +30,9 @@ export default {
     paginatedUsers() {
       let from = (this.pageNumber - 1) * this.usersPerPage;
       let to = from + this.usersPerPage;
-      return this.products.slice(from,to)
+      return this.products.slice(from, to);
     },
   },
-
 };
 </script>
 
