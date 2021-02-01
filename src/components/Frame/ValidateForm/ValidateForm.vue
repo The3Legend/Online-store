@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { HTTP } from "../axios/plagins";
+import { HTTP } from "../../../axios/plagins";
 export default {
   name: "ValidateForm",
   data() {

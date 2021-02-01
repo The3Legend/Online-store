@@ -32,7 +32,6 @@
             </b-collapse>
           </div>
         </div>
-
         <div class="materials" ref="materialControl">
           <div class="material">
             <div class="text-material">Материал</div>
@@ -109,10 +108,10 @@
 </template>
 
 <script>
-import CardGrop from "./Card";
-import ValidateForm from "./ValidateForm";
-import Footer from "./Footer";
-import { HTTP } from "../axios/plagins";
+import CardGrop from "./CardGrop/CardGrop"
+import ValidateForm from "./ValidateForm/ValidateForm";
+import Footer from "./Footer/Footer";
+import { HTTP } from "../../axios/plagins";
 export default {
   name: "Frame",
   components: {

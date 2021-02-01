@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
-import Frame from "./components/Frame";
+import Navbar from "./components/Navbar/Navbar";
+import Frame from "./components/Frame/Frame";
 export default {
   name: "app",
   components: {
