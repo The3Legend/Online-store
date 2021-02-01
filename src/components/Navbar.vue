@@ -25,7 +25,7 @@ export default {
   position: absolute;
   width: 349px;
   height: 57px;
-  left: 841px;
+  left: 700px;
   top: 20px;
   margin: 50px 0px;
 }

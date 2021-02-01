@@ -83,7 +83,7 @@ import { HTTP } from "../axios/plagins";
 export default {
   name: "CardGrop",
    props: {
-    filterCountrys: {
+    filterCheckProducts: {
       type: Array,
       default: () => {
         return [];
@@ -105,16 +105,16 @@ export default {
       .then((response) => (this.products = response.data))
       .catch((error) => {
         console.log(error);
-      });
+      })
   },
   computed: {
     pages() {
-      return Math.ceil(this.products.length / 6);
+      return Math.ceil(this.filterCheckProducts.length / 6);
     },
     paginatedUsers() {
       let from = (this.pageNumber - 1) * this.usersPerPage;
       let to = from + this.usersPerPage;
-      return this.filterCountrys.slice(from, to);
+      return this.filterCheckProducts.slice(from, to);
     },
   },
   methods: {

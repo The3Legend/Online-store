@@ -2,18 +2,20 @@
   <div id="frame">
     <div class="respons">
       <div id="Chekbox">
-        <div class="price">
+        <div class="price" ref="priceControl">
           <div class="price-container">
             <div class="text-price">
               Цена(грн)
             </div>
             <div>
               <svg
+                v-b-toggle.collapse-5
                 width="14"
                 height="9"
                 viewBox="0 0 14 9"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                @click="changPrice"
               >
                 <path
                   d="M13.8897 8.15024L13.6678 8.38388C13.5207 8.53871 13.2823 8.53871 13.1352 8.38388L6.99999 1.92453L0.864777 8.38388C0.717716 8.53871 0.479267 8.53871 0.332175 8.38388L0.110296 8.15024C-0.0367652 7.99541 -0.0367652 7.74436 0.110296 7.58953L6.7337 0.616124C6.88076 0.461292 7.11921 0.461292 7.2663 0.616124L13.8897 7.58953C14.0368 7.74436 14.0368 7.99541 13.8897 8.15024Z"
@@ -23,12 +25,14 @@
             </div>
           </div>
           <div class="range-slider">
-            <input type="number" v-model="minPrice" />
-            {{ minPrice }}
-            <input type="number" v-model="maxPrice" />
-            {{ maxPrice }}
+            <b-collapse visible id="collapse-5">
+              <input class="input" type="number" v-model="minPrice" />
+              -
+              <input class="input" type="number" v-model="maxPrice" />
+            </b-collapse>
           </div>
         </div>
+
         <div class="materials" ref="materialControl">
           <div class="material">
             <div class="text-material">Материал</div>
@@ -57,6 +61,7 @@
               :key="material.id"
               v-model="checkboxMaterial"
               :value="material.title"
+               v-on:click="filterCheckProducts"
             >
               {{ material.title }}
             </b-form-checkbox>
@@ -89,37 +94,37 @@
               :key="country.id"
               v-model="checkboxCountry"
               :value="country.title"
-              v-on:click="filterCountrys"
+              v-on:click="filterCheckProducts"
             >
               {{ country.title }}
             </b-form-checkbox>
           </b-collapse>
         </div>
       </div>
-      <CardGrop :filterCountrys="filterCountrys" />
+      <CardGrop :filterCheckProducts="filterCheckProducts" />
     </div>
-    <InputCall />
+    <ValidateForm />
     <Footer />
   </div>
 </template>
 
 <script>
 import CardGrop from "./Card";
-import InputCall from "./InputCall";
+import ValidateForm from "./ValidateForm";
 import Footer from "./Footer";
 import { HTTP } from "../axios/plagins";
 export default {
   name: "Frame",
   components: {
     CardGrop,
-    InputCall,
+    ValidateForm,
     Footer,
   },
   data() {
     return {
       allProducts: [],
-      minPrice: "",
-      maxPrice: "",
+      minPrice: 0,
+      maxPrice: 999999,
       materials: [],
       countries: [],
       checkboxMaterial: [],
@@ -172,17 +177,41 @@ export default {
           this.$refs.coutryControl.style.height = "129px";
         }, 100);
     },
+    changPrice: function() {
+      this.responsPrice = !this.responsPrice;
+      if (this.responsPrice) {
+        setTimeout(() => {
+          this.$refs.priceControl.style.height = "60px";
+        }, 100);
+      } else
+        setTimeout(() => {
+          this.$refs.priceControl.style.height = "129px";
+        }, 100);
+    },
   },
   computed: {
-    filterCountrys() {
-      // if there are no checked locations, return everything.
-      // You could remove this if you only want to return
-      // checked locations.
-      if (!this.checkboxCountry.length) return this.allProducts;
+    filterCheckProducts() {
+      let filterProducts = this.allProducts;
 
-      return this.allProducts.filter((j) =>
-        this.checkboxCountry.includes(j.manufacturer.title)
-      );
+      if (this.checkboxMaterial.length > 0) {
+        filterProducts = filterProducts.filter((el) => {
+          if (el.material !== null) {
+            return this.checkboxMaterial.includes(el.material.title);
+          }
+        });
+      }
+
+      if (this.checkboxCountry.length > 0) {
+        filterProducts = filterProducts.filter((el) => {
+          return this.checkboxCountry.includes(el.manufacturer.title);
+        });
+      }
+
+      return filterProducts.filter((el) => {
+        return (
+          Number(el.price) >= this.minPrice && Number(el.price) <= this.maxPrice
+        );
+      });
     },
   },
 };
@@ -277,6 +306,30 @@ export default {
   order: 0;
   align-self: stretch;
   flex-grow: 0;
+}
+.range-slider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+
+  width: 198.66px;
+  height: 30px;
+  left: 0px;
+  top: 26.5px;
+}
+.input {
+  margin-top: 50px;
+  width: 90px;
+  height: 30px;
+  border: 0;
+}
+.text-price {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
 }
 .materials {
   display: flex;

@@ -6,7 +6,7 @@
         type="text"
         name="number"
         id="number"
-        placeholder="Ваш номер телефона"
+        placeholder="Введите ваш email"
       />
       <button type="submit" @click="validation">Заказать звонок</button>
     </div>
@@ -17,8 +17,9 @@
 </template>
 
 <script>
+import { HTTP } from "../axios/plagins";
 export default {
-  name: "InputCall",
+  name: "ValidateForm",
   data() {
     return {
       inputValue: "",
@@ -27,12 +28,19 @@ export default {
   },
   methods: {
     validation() {
-      const regPhone = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-      !this.inputValue.match(regPhone)
-        ? (this.inputValidate = true)
-        : (this.inputValidate = false);
+      const regMail = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!this.inputValue.match(regMail)) {
+        this.inputValidate = true;
+      } else {
+        HTTP.post("http://95.217.16.207:1337/forms", {
+          email: this.inputValue,
+        })
+          .then((respons) => console.log(respons))
+          .catch((err) => console.log(err));
+
+        this.inputValidate = false;
+      }
       this.inputValue = "";
-      return this.inputValidate;
     },
   },
 };
@@ -64,7 +72,7 @@ button {
   margin-left: 120px;
   color: red;
 }
-.res{
+.res {
   margin-bottom: 100px;
 }
 </style>
